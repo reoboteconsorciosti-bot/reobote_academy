@@ -1,0 +1,27 @@
+# Segredos: NUNCA entram na imagem (as variáveis são passadas na execução)
+.env
+.env.*
+!.env.example
+
+# Gerados / instalados dentro do build
+node_modules
+.next
+out
+*.tsbuildinfo
+next-env.d.ts
+
+# Ferramentas e arquivos que não vão para produção
+.git
+.gitignore
+.vscode
+.idea
+.claude
+scripts
+docs
+*.md
+Dockerfile
+.dockerignore
+pnpm-lock.yaml
+pnpm-workspace.yaml
+npm-debug.log*
+.DS_Store
