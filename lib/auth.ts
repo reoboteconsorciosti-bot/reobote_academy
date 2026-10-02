@@ -41,12 +41,38 @@ export const crmUrl = () => (process.env.CRM_URL ?? '').replace(/\/+$/, '')
 export const cookieBase = { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax' as const }
 
 export function authConfigured() {
-  return !!(crmUrl() && process.env.ACADEMY_CLIENT_ID && process.env.ACADEMY_CLIENT_SECRET && (process.env.ACADEMY_SESSION_SECRET ?? '').length >= 32)
+  const missing = missingAuthConfig()
+  if (missing.length) logAuth('login indisponível: configuração ausente', missing.join(', '))
+  return missing.length === 0
+}
+
+// Endereço PÚBLICO da Academy. Atrás de proxy/container (Easypanel, Docker) o request.url é o endereço
+// interno (ex.: https://0.0.0.0:3000), inacessível pelo navegador. Em produção, ACADEMY_URL é obrigatória;
+// em dev, sem ela, usa o próprio endereço da requisição (localhost).
+export function publicUrl(path: string, request: NextRequest) {
+  const base = (process.env.ACADEMY_URL ?? '').trim().replace(/\/+$/, '')
+  return new URL(path, base || request.url)
+}
+
+// Log de diagnóstico do login: só o MOTIVO, nunca code, state, verifier, tokens ou segredos.
+export function logAuth(event: string, detail?: string) {
+  console.warn(`[auth] ${event}${detail ? ` (${detail.replace(/[^\p{L}\p{N} _.:/()-]/gu, '').slice(0, 160)})` : ''}`)
+}
+
+// Nomes (nunca valores) das variáveis que faltam para o login funcionar.
+export function missingAuthConfig() {
+  return [
+    !crmUrl() && 'CRM_URL',
+    !process.env.ACADEMY_CLIENT_ID && 'ACADEMY_CLIENT_ID',
+    !process.env.ACADEMY_CLIENT_SECRET && 'ACADEMY_CLIENT_SECRET',
+    (process.env.ACADEMY_SESSION_SECRET ?? '').length < 32 && 'ACADEMY_SESSION_SECRET (mín. 32 caracteres)',
+    process.env.NODE_ENV === 'production' && !process.env.ACADEMY_URL && 'ACADEMY_URL',
+  ].filter(Boolean) as string[]
 }
 
 // Resposta de redirecionamento para um caminho FIXO da Academy (nunca vindo do navegador), sem cache e sem referrer.
 export function redirectTo(request: NextRequest, path: string) {
-  const res = NextResponse.redirect(new URL(path, request.url), 303)
+  const res = NextResponse.redirect(publicUrl(path, request), 303)
   res.headers.set('Cache-Control', 'no-store')
   res.headers.set('Referrer-Policy', 'no-referrer')
   return res
@@ -92,16 +118,26 @@ async function tokenRequest(params: Record<string, string>): Promise<TokenRespon
       cache: 'no-store',
       signal: AbortSignal.timeout(CRM_TIMEOUT_MS),
     })
-    if (!res.ok) return null
-    const data = await res.json()
-    const valid =
-      typeof data?.access_token === 'string' && data.access_token.length > 0 &&
-      typeof data.token_type === 'string' && data.token_type.toLowerCase() === 'bearer' &&
-      typeof data.expires_in === 'number' && data.expires_in > 0 &&
-      typeof data.user?.id === 'string' && data.user.id.length > 0 &&
-      (data.user.role === 'admin' || data.user.role === 'consultor')
-    return valid ? data : null
-  } catch {
+    const data = await res.json().catch(() => null)
+    if (!res.ok) {
+      logAuth(`/token (${params.grant_type}) recusado pelo CRM`, `HTTP ${res.status} ${typeof data?.error === 'string' ? data.error : ''}`)
+      return null
+    }
+    const problems = [
+      !(typeof data?.access_token === 'string' && data.access_token.length > 0) && 'access_token',
+      !(typeof data?.token_type === 'string' && data.token_type.toLowerCase() === 'bearer') && 'token_type',
+      !(typeof data?.expires_in === 'number' && data.expires_in > 0) && 'expires_in',
+      !(typeof data?.user?.id === 'string' && data.user.id.length > 0) && 'user.id',
+      !(data?.user?.role === 'admin' || data?.user?.role === 'consultor') && 'user.role',
+    ].filter(Boolean)
+    if (problems.length) {
+      logAuth(`/token (${params.grant_type}) com resposta fora do contrato`, `campos: ${problems.join(', ')}`)
+      return null
+    }
+    return data
+  } catch (error) {
+    const cause = (error as { cause?: { code?: string } })?.cause?.code ?? (error as Error)?.name
+    logAuth(`/token (${params.grant_type}) sem resposta do CRM`, cause)
     return null
   }
 }

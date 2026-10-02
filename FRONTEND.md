@@ -40,6 +40,7 @@ O [Dockerfile](Dockerfile) gera uma imagem de produção com o modo `standalone`
 ```bash
 docker build -t reobote-academy .
 docker run -p 3000:3000 \
+  -e ACADEMY_URL=https://<domínio-da-academy> \
   -e CRM_URL=https://crm.reoboteconsorcios.com.br \
   -e ACADEMY_CLIENT_ID=reobote-academy \
   -e ACADEMY_CLIENT_SECRET=... \
@@ -47,6 +48,8 @@ docker run -p 3000:3000 \
   reobote-academy
 ```
 
+- **`ACADEMY_URL` é obrigatória em produção**: atrás do proxy, o Next só conhece o endereço interno do container (`0.0.0.0:3000`); sem ela, os redirecionamentos levam o navegador para lá.
+- Falhas de login são registradas no log do servidor com o prefixo `[auth]` (só o motivo; nunca code, state, tokens ou segredos).
 - As variáveis são lidas **na execução**, não no build: nenhum segredo entra na imagem (o [.dockerignore](.dockerignore) exclui `.env*`).
 - Produção precisa de **HTTPS** na frente do container: o cookie de sessão usa `Secure`.
 - O rate limit é em memória: rode **uma instância** ou troque por um store compartilhado.

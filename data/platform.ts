@@ -51,8 +51,17 @@ export const formacaoLessons: Lesson[] = [
 
 // Seção 2 — EDRAS. Mesmo formato das aulas acima; use ids com o prefixo "edras-" para não repetir ids da Formação.
 export const edrasLessons: Lesson[] = [
-  { id: 'edras-aula-1', title: 'EDRAS — Aula 1', duration: '00:00', video: '' },
-  { id: 'edras-aula-2', title: 'EDRAS — Aula 2', duration: '00:00', video: '' },
+  { id: 'edras-aula-1', title: 'INTRODUÇÃO', duration: '00:43', video: 'https://www.youtube.com/watch?v=ieZox_5fCis&list=PLjDhcajmMQKRupdkbrYt1_dVUmN-bdBJY&index=1' },
+  { id: 'edras-aula-2', title: 'INTRODUÇÃO AO EDRAS', duration: '04:47', video: 'https://www.youtube.com/watch?v=d_ikju4UAko&list=PLjDhcajmMQKRupdkbrYt1_dVUmN-bdBJY&index=2' },
+  { id: 'edras-aula-3', title: 'ENGAJAR', duration: '11:45', video: 'https://www.youtube.com/watch?v=u5Xw8vWnLTA&list=PLjDhcajmMQKRupdkbrYt1_dVUmN-bdBJY&index=3' },
+  { id: 'edras-aula-4', title: 'COMO ENGAJAMOS - REOBOTE', duration: '03:32', video: 'https://www.youtube.com/watch?v=4UV3C_Pw25U&list=PLjDhcajmMQKRupdkbrYt1_dVUmN-bdBJY&index=4' },
+  { id: 'edras-aula-5', title: 'COMO ENGAJAMOS - AUTOBOTE', duration: '03:23', video: 'https://www.youtube.com/watch?v=mSEYgPdjlNY&list=PLjDhcajmMQKRupdkbrYt1_dVUmN-bdBJY&index=5' },
+  { id: 'edras-aula-6', title: 'SCRIPT DE LIGAÇÃO', duration: '01:58', video: 'https://www.youtube.com/watch?v=xUJyK2zn7VU&list=PLjDhcajmMQKRupdkbrYt1_dVUmN-bdBJY&index=6' },
+  { id: 'edras-aula-7', title: 'PORTA EM PORTA', duration: '01:57', video: 'https://www.youtube.com/watch?v=zCOgWNMg64A&list=PLjDhcajmMQKRupdkbrYt1_dVUmN-bdBJY&index=7' },
+  { id: 'edras-aula-8', title: 'DESCOBRIR', duration: '05:35', video: 'https://www.youtube.com/watch?v=X1whsgtP72M&list=PLjDhcajmMQKRupdkbrYt1_dVUmN-bdBJY&index=8' },
+  { id: 'edras-aula-9', title: 'RECOMENDAR', duration: '17:15', video: 'https://www.youtube.com/watch?v=MMIrX7e_hpI&list=PLjDhcajmMQKRupdkbrYt1_dVUmN-bdBJY&index=9' },
+  { id: 'edras-aula-10', title: 'ATUAR', duration: '07:09', video: 'https://www.youtube.com/watch?v=Q8C4uqdgpLA&list=PLjDhcajmMQKRupdkbrYt1_dVUmN-bdBJY&index=10' },
+  { id: 'edras-aula-11', title: 'CRM', duration: '12:00', video: 'https://www.youtube.com/watch?v=YXpYcC5zCrQ&list=PLjDhcajmMQKRupdkbrYt1_dVUmN-bdBJY&index=11' },
 ]
 
 export type LessonSection = { id: string; title: string; lessons: Lesson[] }

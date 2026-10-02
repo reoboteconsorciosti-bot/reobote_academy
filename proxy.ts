@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { SESSION_COOKIE, cookieBase, needsRefresh, openSession, refreshSession, sealSession, sessionCookieOptions } from '@/lib/auth'
+import { SESSION_COOKIE, cookieBase, needsRefresh, openSession, publicUrl, refreshSession, sealSession, sessionCookieOptions } from '@/lib/auth'
 
 // Toda página e rota /api passa por aqui:
 // - sem sessão válida → página: /auth/start (login no CRM) | API: 401;
@@ -18,14 +18,14 @@ export async function proxy(request: NextRequest) {
   if (!session) {
     const res = isApi
       ? NextResponse.json({ error: 'Sessão expirada' }, { status: 401 })
-      : NextResponse.redirect(new URL('/auth/start', request.url))
+      : NextResponse.redirect(publicUrl('/auth/start', request))
     res.cookies.set(SESSION_COOKIE, '', { ...cookieBase, path: '/', maxAge: 0 })
     res.headers.set('Cache-Control', 'no-store')
     return res
   }
 
   if (request.nextUrl.pathname.startsWith('/admin') && session.role !== 'admin') {
-    return NextResponse.redirect(new URL('/', request.url))
+    return NextResponse.redirect(publicUrl('/', request))
   }
 
   // Se renovou, a própria requisição já segue com o cookie novo para as páginas/rotas.
