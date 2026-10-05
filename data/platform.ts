@@ -1,13 +1,16 @@
 // Conteúdo do curso (não são dados de usuário). Dados de pessoas e progresso vêm do sistema central: ver lib/central.ts.
 
 // video: link do YouTube (watch, youtu.be, shorts, embed ou só o ID) ou arquivo direto (.mp4, .webm, .ogg). Vazio = "vídeo em breve".
-export type Lesson = { id: string; title: string; duration: string; video: string; description?: string }
+// image (opcional): foto da aula, caminho a partir de /public (ex.: '/imagens/aulas/boas-vindas.jpg'). Sem ela, usa a do curso.
+export type Lesson = { id: string; title: string; duration: string; video: string; description?: string; image?: string }
 export type LessonState = 'done' | 'current' | 'locked'
 
 export const course = {
   id: 'formacao-consultores',
   title: 'Formação de Consultores Reobote',
   description: 'Os fundamentos para iniciar sua jornada como consultor Reobote.',
+  // Foto da capa: coloque o arquivo em public/imagens/ e ajuste o nome aqui. Se o arquivo não existir, aparece o gradiente.
+  image: '/imagens/logo-reobote/curso-reobote.png',
   tone: 'from-[#0c1428] to-[#153f65]',
   accent: '#1db1e7',
 }
@@ -25,7 +28,7 @@ export const formacaoLessons: Lesson[] = [
   { id: 'lance', title: 'Calculo de Lance', duration: '02:31', video: 'https://www.youtube.com/watch?v=w_5C7QQLJhc&list=PLjDhcajmMQKTUKmcOby--fKzTKoab8l7R&index=6' },
   { id: 'embutido', title: 'Calculo de Lance com embutido', duration: '03:15', video: 'https://www.youtube.com/watch?v=25F36hgINak&list=PLjDhcajmMQKTUKmcOby--fKzTKoab8l7R&index=7' },
   { id: 'embutido-2', title: 'Calculo de Lance com embutido II', duration: '01:39', video: 'https://www.youtube.com/watch?v=uZHtPWtqFSw&list=PLjDhcajmMQKTUKmcOby--fKzTKoab8l7R&index=8' },
-  { id: 'pos-lance', title: 'Calculo de lance e parcela pós Lance', duration: '04:39', video: 'https://www.youtube.com/watch?v=K-j_QnUoD20&list=PLjDhcajmMQKTUKmcOby--fKzTKoab8l7R&index=9' },
+  { id: 'pos-lance', title: 'Calculo de lance e parcela pós Lance', duration: '04:39', video: 'https://www.youtube.com/watch?v=nx_6OFeFex8&list=PLjDhcajmMQKTUKmcOby--fKzTKoab8l7R&index=9' },
   { id: 'pos-lance-2', title: 'Calculo de lance e parcela pós Lance II', duration: '02:39', video: 'https://www.youtube.com/watch?v=jnSBriOdQY4&list=PLjDhcajmMQKTUKmcOby--fKzTKoab8l7R&index=10' },
   { id: 'pos-lance-3', title: 'Calculo de lance e parcela pós Lance III', duration: '00:00', video: 'https://www.youtube.com/watch?v=bUoI5CJqIAQ&list=PLjDhcajmMQKTUKmcOby--fKzTKoab8l7R&index=11' },
   { id: 'servopa', title: 'Servopa- regras, formas de contemplação', duration: '04:46', video: 'https://www.youtube.com/watch?v=1hhJXGHEmoU&list=PLjDhcajmMQKTUKmcOby--fKzTKoab8l7R&index=12' },
@@ -44,7 +47,7 @@ export const formacaoLessons: Lesson[] = [
   { id: 'faturamento', title: 'Faturamente do bem', duration: '06:44', video: 'https://www.youtube.com/watch?v=p6WdZ89rq_8&list=PLjDhcajmMQKTUKmcOby--fKzTKoab8l7R&index=25' },
   { id: 'imovel-planta', title: 'Imóvel na planta', duration: '01:40', video: 'https://www.youtube.com/watch?v=oMEG0V7HC74&list=PLjDhcajmMQKTUKmcOby--fKzTKoab8l7R&index=27' },
   { id: 'incc-pratica', title: 'INCC na prática', duration: '03:49', video: 'https://www.youtube.com/watch?v=gCOWzghk-nI&list=PLjDhcajmMQKTUKmcOby--fKzTKoab8l7R&index=28' },
-  { id: 'taxa', title: 'Taxa de transferência', duration: '02:41', video: 'https://www.youtube.com/watch?v=V6fQ7pDk7t4&list=PLjDhcajmMQKTUKmcOby--fKzTKoab8l7R&index=28' },
+  { id: 'taxa', title: 'Taxa de transferência', duration: '02:41', video: 'https://www.youtube.com/watch?v=gCOWzghk-nI&list=PLjDhcajmMQKTUKmcOby--fKzTKoab8l7R&index=28' },
   { id: 'consorcio-investimento', title: 'Consorcio como investimento', duration: '04:07', video: 'https://www.youtube.com/watch?v=ckT6lce-Hqg&list=PLjDhcajmMQKTUKmcOby--fKzTKoab8l7R&index=29' },
   { id: 'consorcio-investimento-2', title: 'Consórcio como investimento', duration: '06:08', video: 'https://www.youtube.com/watch?v=bBMfwtbxp-M&list=PLjDhcajmMQKTUKmcOby--fKzTKoab8l7R&index=30' },
 ]
